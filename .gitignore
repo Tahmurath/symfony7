@@ -1,3 +1,9 @@
+.idea
+/.idea
+/.idea/*
+.idea/*
+.idea/workspace.xml
+
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -8,3 +14,10 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+
+
+/mariadb
+/.idea
+.DS_Store
+*.DS_Store
