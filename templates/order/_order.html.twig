@@ -1,0 +1,9 @@
+<div class="example-wrapper">
+    Order item template
+    <h1>id: {{ order.id }} </h1>
+    <h1>orderTitle: {{ order.orderTitle }}</h1>
+    <h1>createdAt: {{ order.createdAt|date}} </h1>
+    <h1>updatedAt: {{ order.updatedAt|date('Y-m-d H:i:s') }} </h1>
+    <a href="{{ path('app_order_item', { id: order.id }) }}">View</a>
+    <a href="{{ path('app_order_delete', { id: order.id }) }}">Delete</a>
+</div>

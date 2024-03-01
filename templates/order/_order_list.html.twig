@@ -1,0 +1,9 @@
+<div class="example-wrapper">
+    {% if orders|length > 0 %}
+        {% for order in orders %}
+            {{ include('order/_order.html.twig', {order: order}) }}
+        {% endfor %}
+    {% else %}
+        There's no order
+    {% endif %}
+</div>

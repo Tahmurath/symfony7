@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,8 +13,21 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class OrderController extends AbstractController
 {
-    #[Route('/add_order', name: 'app_order')]
+    #[Route('/order', name: 'app_order_list')]
     public function index(
+        OrderRepository $orderRepository
+    ): Response
+    {
+
+        $orders = $orderRepository->findAll();
+
+        return $this->render('order/order_list.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+
+    #[Route('/add_order', name: 'app_order_add')]
+    public function add(
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator,
         LoggerInterface $logger
@@ -36,18 +50,31 @@ class OrderController extends AbstractController
         }
 
 
-        return $this->render('order/index.html.twig', [
+        return $this->render('order/add_order.html.twig', [
             'order' => $order,
             'errors' => $errors,
         ]);
     }
 
     #[Route('/order/{id}', name: 'app_order_item')]
-    public function show2(
+    public function show(
         EntityManagerInterface $entityManager,
         Order $order
     ): Response
     {
+        return $this->render('order/order_item.html.twig', [
+            'order' => $order,
+        ]);
+    }
+    #[Route('/order/{id}/delete', name: 'app_order_delete')]
+    public function delete(
+        EntityManagerInterface $entityManager,
+        Order $order
+    ): Response
+    {
+        $entityManager->remove($order);
+        $entityManager->flush();
+        return  $this->redirectToRoute('app_order_list');
         return $this->render('order/order_item.html.twig', [
             'order' => $order,
         ]);
