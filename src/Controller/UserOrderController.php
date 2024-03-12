@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
-use App\Repository\OrderRepository;
+use App\Entity\UserOrder;
+use App\Repository\UserOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class OrderController extends AbstractController
+class UserOrderController extends AbstractController
 {
     #[Route('/order', name: 'app_order_list')]
     public function index(
-        OrderRepository $orderRepository
+        UserOrderRepository $userOrderRepository
     ): Response
     {
 
-        $orders = $orderRepository->findAll();
+        $userOrders = $userOrderRepository->findAll();
 
         return $this->render('order/order_list.html.twig', [
-            'orders' => $orders,
+            'userOrders' => $userOrders,
         ]);
     }
 
@@ -34,24 +34,23 @@ class OrderController extends AbstractController
     ): Response
     {
 
-        $order = new Order();
-        $order->setOrderTitle('The order title');
-        $order->setOrderPrice(10000);
-        $order->setOrderStatus('init');
+        $userOrder = new UserOrder();
+        $userOrder->setOrderPrice(10000);
+        $userOrder->setOrderStatus('init');
 
-        $errors = $validator->validate($order);
+        $errors = $validator->validate($userOrder);
 
         $logger->error(count($errors));
 
         if (count($errors) == 0) {
 
-            $entityManager->persist($order);
+            $entityManager->persist($userOrder);
             $entityManager->flush();
         }
 
 
-        return $this->render('order/add_order.html.twig', [
-            'order' => $order,
+        return $this->render('order/order_item.html.twig', [
+            'userOrder' => $userOrder,
             'errors' => $errors,
         ]);
     }
@@ -59,24 +58,22 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_item')]
     public function show(
         EntityManagerInterface $entityManager,
-        Order $order
+        UserOrder $userOrder
     ): Response
     {
         return $this->render('order/order_item.html.twig', [
-            'order' => $order,
+            'userOrder' => $userOrder,
         ]);
     }
+
     #[Route('/order/{id}/delete', name: 'app_order_delete')]
     public function delete(
         EntityManagerInterface $entityManager,
-        Order $order
+        UserOrder $userOrder
     ): Response
     {
-        $entityManager->remove($order);
+        $entityManager->remove($userOrder);
         $entityManager->flush();
         return  $this->redirectToRoute('app_order_list');
-        return $this->render('order/order_item.html.twig', [
-            'order' => $order,
-        ]);
     }
 }

@@ -2,29 +2,24 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
+use App\Repository\UserOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`order`')]
-class Order
+#[ORM\Entity(repositoryClass: UserOrderRepository::class)]
+class UserOrder
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $orderTitle = null;
-
     #[ORM\Column]
     private ?int $orderPrice = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $OrderStatus = null;
+    private ?string $orderStatus = null;
 
     #[ORM\Column]
     #[Assert\NotNull]
@@ -47,18 +42,6 @@ class Order
         return $this->id;
     }
 
-    public function getOrderTitle(): ?string
-    {
-        return $this->orderTitle;
-    }
-
-    public function setOrderTitle(string $orderTitle): static
-    {
-        $this->orderTitle = $orderTitle;
-
-        return $this;
-    }
-
     public function getOrderPrice(): ?int
     {
         return $this->orderPrice;
@@ -73,12 +56,12 @@ class Order
 
     public function getOrderStatus(): ?string
     {
-        return $this->OrderStatus;
+        return $this->orderStatus;
     }
 
-    public function setOrderStatus(string $OrderStatus): static
+    public function setOrderStatus(string $orderStatus): static
     {
-        $this->OrderStatus = $OrderStatus;
+        $this->orderStatus = $orderStatus;
 
         return $this;
     }

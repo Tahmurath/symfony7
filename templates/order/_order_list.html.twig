@@ -1,7 +1,7 @@
 <div class="example-wrapper">
-    {% if orders|length > 0 %}
-        {% for order in orders %}
-            {{ include('order/_order.html.twig', {order: order}) }}
+    {% if userOrders|length > 0 %}
+        {% for userOrder in userOrders %}
+            {{ include('order/_order.html.twig', {userOrder: userOrder}) }}
         {% endfor %}
     {% else %}
         There's no order
