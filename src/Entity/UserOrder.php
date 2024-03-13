@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserOrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -31,10 +33,14 @@ class UserOrder
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\OneToMany(targetEntity: UserOrderItem::class, mappedBy: 'UserOrder')]
+    private Collection $userOrderItems;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTimeImmutable());
         $this->setUpdatedAt(new \DateTimeImmutable());
+        $this->userOrderItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,6 +92,36 @@ class UserOrder
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserOrderItem>
+     */
+    public function getUserOrderItems(): Collection
+    {
+        return $this->userOrderItems;
+    }
+
+    public function addUserOrderItem(UserOrderItem $userOrderItem): static
+    {
+        if (!$this->userOrderItems->contains($userOrderItem)) {
+            $this->userOrderItems->add($userOrderItem);
+            $userOrderItem->setUserOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserOrderItem(UserOrderItem $userOrderItem): static
+    {
+        if ($this->userOrderItems->removeElement($userOrderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($userOrderItem->getUserOrder() === $this) {
+                $userOrderItem->setUserOrder(null);
+            }
+        }
 
         return $this;
     }
