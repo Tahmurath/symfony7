@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UserOrder;
+use App\Entity\UserOrderItem;
 use App\Repository\UserOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -38,6 +39,15 @@ class UserOrderController extends AbstractController
         $userOrder->setOrderPrice(10000);
         $userOrder->setOrderStatus('init');
 
+
+        $userOrderItem = new UserOrderItem();
+        $userOrderItem->setItemPrice(500);
+        $userOrderItem->setUserOrder($userOrder);
+
+        $userOrderItem2 = new UserOrderItem();
+        $userOrderItem2->setItemPrice(600);
+        $userOrderItem2->setUserOrder($userOrder);
+
         $errors = $validator->validate($userOrder);
 
         $logger->error(count($errors));
@@ -45,6 +55,8 @@ class UserOrderController extends AbstractController
         if (count($errors) == 0) {
 
             $entityManager->persist($userOrder);
+            $entityManager->persist($userOrderItem);
+            $entityManager->persist($userOrderItem2);
             $entityManager->flush();
         }
 

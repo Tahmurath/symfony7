@@ -1,8 +1,10 @@
 <div class="example-wrapper">
-    Order item template
+    Order template
     <h1>id: {{ userOrder.id }} </h1>
     <h1>createdAt: {{ userOrder.createdAt|date}} </h1>
     <h1>updatedAt: {{ userOrder.updatedAt|date('Y-m-d H:i:s') }} </h1>
     <a href="{{ path('app_order_item', { id: userOrder.id }) }}">View</a>
     <a href="{{ path('app_order_delete', { id: userOrder.id }) }}">Delete</a>
+
+    Items:{{ include('order/_order_item_list.html.twig', { userOrderItems: userOrder.getUserOrderItems()}) }}
 </div>
