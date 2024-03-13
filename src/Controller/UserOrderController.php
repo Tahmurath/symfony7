@@ -20,7 +20,7 @@ class UserOrderController extends AbstractController
     ): Response
     {
 
-        $userOrders = $userOrderRepository->findAll();
+        $userOrders = $userOrderRepository->findAllWithItems();
 
         return $this->render('order/order_list.html.twig', [
             'userOrders' => $userOrders,
@@ -73,6 +73,19 @@ class UserOrderController extends AbstractController
         UserOrder $userOrder
     ): Response
     {
+        return $this->render('order/order_item.html.twig', [
+            'userOrder' => $userOrder,
+        ]);
+    }
+
+    #[Route('/vieworder/{id}', name: 'app_order_itemfull')]
+    public function showfull(
+        UserOrderRepository $userOrderRepository,
+        int $id
+    ): Response
+    {
+        $userOrder = $userOrderRepository->findOneWithItems($id);
+
         return $this->render('order/order_item.html.twig', [
             'userOrder' => $userOrder,
         ]);

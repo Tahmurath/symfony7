@@ -21,6 +21,29 @@ class UserOrderRepository extends ServiceEntityRepository
         parent::__construct($registry, UserOrder::class);
     }
 
+    public function findAllWithItems()
+    {
+        return $this->findQuery()
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findOneWithItems(int $id)
+    {
+        return $this->findQuery()
+            ->where('o.id = :id')
+            ->setParameter('id',$id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    private function findQuery()
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.userOrderItems','i')
+            ->addSelect('i');
+    }
+
     //    /**
     //     * @return UserOrder[] Returns an array of UserOrder objects
     //     */
