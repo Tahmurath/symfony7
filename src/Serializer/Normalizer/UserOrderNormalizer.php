@@ -18,6 +18,8 @@ class UserOrderNormalizer implements NormalizerInterface
     {
         $data = $this->normalizer->normalize($object, $format, $context);
 
+        //dd($data);
+        $data['test'] = time();
         // TODO: add, edit, or delete some data
 
         return $data;

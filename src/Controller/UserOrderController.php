@@ -8,6 +8,7 @@ use App\Repository\UserOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -71,12 +72,26 @@ class UserOrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_item')]
     public function show(
         EntityManagerInterface $entityManager,
-        UserOrder $userOrder
+        UserOrder $userOrder,
     ): Response
     {
         return $this->render('order/order_item.html.twig', [
             'userOrder' => $userOrder,
         ]);
+    }
+
+    #[Route('/v1/order/{id}', name: 'app_api_order_item')]
+    public function api_show(
+        EntityManagerInterface $entityManager,
+        UserOrder $userOrder,
+        SerializerInterface $serializer
+    ): JsonResponse
+    {
+        $json = $serializer->serialize($userOrder, 'json');
+        return new JsonResponse(
+            data:$json,
+            json:true,
+        );
     }
 
     #[Route('/vieworder/{id}', name: 'app_order_itemfull')]

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserOrderItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: UserOrderItemRepository::class)]
 class UserOrderItem
@@ -15,6 +16,7 @@ class UserOrderItem
 
     #[ORM\ManyToOne(inversedBy: 'userOrderItems')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?UserOrder $UserOrder = null;
 
     #[ORM\Column]
